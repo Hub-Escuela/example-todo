@@ -1,4 +1,2 @@
-const store=[
-
-];
+const store=[];
 export {store};

@@ -28,23 +28,42 @@ getForm.addEventListener(`submit`, (e)=>{
     <div>
         <h6>${newToDo.title}</h6>
         <span>
-            <button type="button" id="toDo-${newToDo.id}">
+            <button type="button" id="toDoComplete-${newToDo.id}">
                 Completar
+            </button>
+        </span>
+        <span>
+            <button type="button" id="toDoDelete-${newToDo.id}">
+                Eliminar
             </button>
         </span>
     </div>
    `)
-
 });
 
 container.addEventListener("click", event=>{
-    const toDoToComplete = event.target.parentNode.parentNode.childNodes[1];
-    console.log(toDoToComplete)
-    const titleTo= toDoToComplete.textContent
-    toDoToComplete.innerHTML=`<strike>${titleTo}</strike>`;
-    console.log(titleTo)
-    
+    const toDoToCompleteTittle = event.target.parentNode.parentNode.childNodes[1];
+    //console.log(toDoToComplete)
+    const titleTo= toDoToCompleteTittle.textContent;
+    const eventTargetItem=event.target;
 
+    if(eventTargetItem.id.includes("toDoComplete")){
+        toDoToCompleteTittle.innerHTML=`<strike>${titleTo}</strike>`;
+            //console.log(titleTo);
+    }
     
+    if(eventTargetItem.id.includes("toDoDelete")){
+        //console.log("click en eliminar");
+        //Eliminar del DOM
+        const itemToDelete=event.target.parentNode.parentNode;
+        itemToDelete.remove();
+        //console.log(itemToDelete);
+
+        //Hacer push a Eliminados
+
+    }
+    //console.log(eventTargetItem.textContent);
 })
+
+
 
