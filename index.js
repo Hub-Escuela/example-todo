@@ -60,7 +60,6 @@ container.addEventListener("click", event=>{
         //console.log(itemToDelete);
 
         //Hacer push a Eliminados
-
     }
     //console.log(eventTargetItem.textContent);
 })
