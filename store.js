@@ -6,10 +6,10 @@ const store = createStore(todosReducer);
 function todosReducer(state = initialState.todos, action) {
   switch (action.type) {
     case "ADD_TODO":
-      console.log("gatito");
+      //console.log("gatito");
       return [...state, { title: action.title }];
     case "DELETE_TODO":
-      state.filter((value, index) => {
+      return state.filter((value, index) => {
         if (index !== action.index) {
           return value;
         }
@@ -30,6 +30,12 @@ function deleteTodo(index) {
   return {
     type: "DELETE_TODO",
     index,
+  };
+}
+
+function deleteLastTodo() {
+  return {
+    type: "DELETE_LAST_TODO",
   };
 }
 

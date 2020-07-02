@@ -883,10 +883,17 @@ function todosReducer() {
 
   switch (action.type) {
     case "ADD_TODO":
-      console.log("gatito");
+      //console.log("gatito");
       return [].concat(_toConsumableArray(state), [{
         title: action.title
       }]);
+
+    case "DELETE_TODO":
+      return state.filter(function (value, index) {
+        if (index !== action.index) {
+          return value;
+        }
+      });
 
     default:
       state;
@@ -900,7 +907,24 @@ function addTodo(title) {
   };
 }
 
+function deleteTodo(index) {
+  return {
+    type: "DELETE_TODO",
+    index: index
+  };
+}
+
+function deleteLastTodo() {
+  return {
+    type: "DELETE_LAST_TODO"
+  };
+}
+
 store.dispatch(addTodo("hola caracola"));
+store.dispatch(addTodo("hola1"));
+store.dispatch(addTodo("hola2"));
+store.dispatch(addTodo("hola3 "));
+store.dispatch(deleteTodo(1));
 console.log(store.getState());
 },{"redux":"node_modules/redux/es/redux.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -930,7 +954,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62565" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54279" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
