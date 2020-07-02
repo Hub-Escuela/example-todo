@@ -1,0 +1,23 @@
+{
+  "name": "example-todo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hubescuela/example-todo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hubescuela/example-todo/issues"
+  },
+  "homepage": "https://github.com/hubescuela/example-todo#readme",
+  "dependencies": {
+    "parcel-bundler": "^1.12.4",
+    "redux": "^4.0.5"
+  }
+}
