@@ -872,27 +872,88 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var initialState = {
-  todos: []
+  todos: [],
+  completeTodos: []
 };
 var store = (0, _redux.createStore)(todosReducer);
 
 function todosReducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState.todos;
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
     case "ADD_TODO":
       //console.log("gatito");
-      return [].concat(_toConsumableArray(state), [{
-        title: action.title
-      }]);
+      return _objectSpread(_objectSpread({}, state), {}, {
+        todos: [].concat(_toConsumableArray(state.todos), [{
+          title: action.title,
+          complete: false
+        }])
+      });
 
     case "DELETE_TODO":
-      return state.filter(function (value, index) {
+      return state.todos.filter(function (value, index) {
         if (index !== action.index) {
           return value;
         }
+      });
+
+    case "DELETE_LAST_TODO":
+      var lastIndex = state.todos.length - 1;
+      return state.todos.filter(function (value, index) {
+        if (index !== lastIndex) {
+          return value;
+        }
+      });
+
+    case "MODIFY_TODO":
+      return state.todos.filter(function (value, index) {
+        if (index === action.index) {
+          value.title = action.title;
+          return value;
+        }
+
+        return value;
+      });
+
+    case "SORT_TODOS":
+      return _toConsumableArray(state.todos.sort(function (a, b) {
+        if (a.title > b.title) {
+          return 1;
+        }
+
+        if (a.title < b.title) {
+          return -1;
+        }
+
+        return 0;
+      }));
+
+    case "CLEAR_ALL_TODOS":
+      return state.todos = [];
+
+    case "COMPLETE_AND_MOVE_TODO":
+      var todoToMove = state.todos.find(function (value, index) {
+        if (index === action.index) {
+          value.complete = true;
+          return value;
+        }
+      });
+      var pendingTodos = state.todos.filter(function (value, index) {
+        if (index !== action.index) {
+          return value;
+        }
+      });
+      return _objectSpread(_objectSpread({}, state), {}, {
+        todos: _toConsumableArray(pendingTodos),
+        completeTodos: [].concat(_toConsumableArray(state.completeTodos), [todoToMove])
       });
 
     default:
@@ -920,11 +981,45 @@ function deleteLastTodo() {
   };
 }
 
+function modifyTodo(title, index) {
+  return {
+    type: "MODIFY_TODO",
+    title: title,
+    index: index
+  };
+}
+
+function sortTodos() {
+  return {
+    type: "SORT_TODOS"
+  };
+}
+
+function clearAllTodos() {
+  return {
+    type: "CLEAR_ALL_TODOS"
+  };
+}
+
+function completeAndMoveTodo(index) {
+  return {
+    type: "COMPLETE_AND_MOVE_TODO",
+    index: index
+  };
+}
+
 store.dispatch(addTodo("hola caracola"));
 store.dispatch(addTodo("hola1"));
 store.dispatch(addTodo("hola2"));
-store.dispatch(addTodo("hola3 "));
-store.dispatch(deleteTodo(1));
+store.dispatch(addTodo("hola3"));
+store.dispatch(addTodo("hola4 "));
+store.dispatch(addTodo("hola5 ")); // store.dispatch(deleteTodo(1));
+// store.dispatch(deleteLastTodo());
+// store.dispatch(modifyTodo("adiós", 3));
+//store.dispatch(sortTodos());
+
+store.dispatch(completeAndMoveTodo(1)); //store.dispatch(clearAllTodos());
+
 console.log(store.getState());
 },{"redux":"node_modules/redux/es/redux.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -954,7 +1049,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54279" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52959" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
